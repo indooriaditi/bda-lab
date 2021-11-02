@@ -1,0 +1,35 @@
+pig sentiment analysis
+
+load_tweets = LOAD '<path>' using PigStorage(',');
+cols = foreach load_tweets generate $0 as id, $1 as text;
+new_cols = foreach cols generate id, text, FLATTEN(TOKENIZE(text)) as word;
+dict = load '<path>' using PigStorage('\t') AS (word:chararray,rating:int);
+word_rating = join new_cols by word left outer, dict by word using 'replicated';
+describe word_rating;
+
+rating = foreach word_rating generate tokens::id as id, tokens::text as text, dict::rating as rate;
+grouped = group rating by (id,text);
+avg_rate = foreach grouped generate group, AVG(rating.rate) as tweet_rating;
+positive = filter avg_rate by tweet_rating>=0;
+negative = filter avg_rate by tweet_rating<0;
+
+_______
+|words|
+_______
+
+word:
+
+hi
+hello
+hi
+hey
+
+______________
+group | words |
+_______________
+hi    {(hi,hi)}
+.
+.
+.
+
+foreach grouped generate group, count(words)

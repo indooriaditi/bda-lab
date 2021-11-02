@@ -1,0 +1,28 @@
+Problem Statement 1:
+Find the top five kinds of Occupation people who were guests in the show, in a particular time period.
+SCRIPT:
+A = load '/home/blessy/Downloads/show.csv' using PigStorage(',') AS 
+(year:chararray,occupation:chararray,date:chararray,group:chararray,
+gusetlist:chararray);
+B = foreach A generate occupation,date;
+C = foreach B generate occupation,ToDate(date,'MM/dd/yy') as date;
+D = filter C by ((date> ToDate('1/11/99','MM/dd/yy')) AND 
+(date<ToDate('6/11/99','MM/dd/yy')));
+#Date range can be modified by the user
+E = group D by occupation;
+F = foreach E generate group, COUNT(D) as cnt;
+G = order F by cnt desc;
+H = limit G 5;
+
+
+Problem Statement 2:
+Find out the number of politicians who came each year.
+SCRIPT
+A = load '/home/blessy/Downloads/show.csv' using PigStorage(',') AS 
+(year:chararray,occupation:chararray,date:chararray,group:chararray,
+gusetlist:chararray);
+B = foreach A generate year,group;
+C = filter B by group == 'Politician';
+D = group C by year;
+E = foreach D generate group, COUNT(C) as cnt;
+F = order E by cnt desc;

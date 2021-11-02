@@ -1,0 +1,20 @@
+/usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.7.3.jar
+
+hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.7.3.jar \
+
+> -input /home/aditi/Desktop/wordcount/word.txt \
+
+> -output /word_count_in_python/output \
+
+> -mapper /home/aditi/Desktop/wordcount/mapper.py \
+
+> -reducer /home/aditi/Desktop/wordcount/reducer.py
+
+
+
+
+
+
+bin/hadoop hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.7.3.jar \ -file /home/aditi/Desktop/wordcount/mapper.py    -mapper /home/aditi/Desktop/wordcount/mapper.py \
+-file /home/aditi/Desktop/wordcount/reducer.py   -reducer /home/aditi/Desktop/wordcount/reducer.py \
+-input /wordcount001/word.txt/* -output /wordcount001/output001

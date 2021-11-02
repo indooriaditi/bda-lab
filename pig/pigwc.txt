@@ -1,0 +1,8 @@
+Step-1: Create a file write some stuff and copy the location
+Step-2: pig -x local
+Step-3 
+lines = LOAD 'your/file/location' AS (line:chararray);
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+grouped = GROUP words BY word;
+wordcount = FOREACH grouped GENERATE group, COUNT(words);
+DUMP wordcount;
